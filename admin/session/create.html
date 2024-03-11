@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link rel="stylesheet" href="../assets/index.css"/>
+</head>
+<body>
+
+	<section id="sidebar">
+        <a href="#" class="brand" >
+            <i class="bx bxs-smile"></i>
+            <span class="text">Admin Panel</span>
+        </a>
+        <ul class="side-menu hrefp">
+            
+            <li >
+                <a href="/admin/trainer/index.html" id="a" >
+                    <i class="bx bxs-shopping-bag-alt"></i>
+                    <span class="text">Trainer</span>
+                </a>
+            </li>
+            <li >
+                <a href="/admin/trainer/index.html" id="a" >
+                    <i class="bx bxs-doughnut-chart"></i>
+                    <span class="text">Class</span>
+                </a>
+            </li>
+            <li  class="active">
+                <a href="/admin/session/index.html" id="a"  >
+                    <i class="bx bxs-message-dots"></i>
+                    <span class="text">Sessions</span>
+                </a>
+            </li>
+            
+        </ul>
+        
+    </section>
+    
+    <section id='content'>
+     <div class="table-data" style="width:80%;margin-left:10%">
+                    <div class="order">
+                        <div class="head">
+                            <h3>Add Session</h3>
+                            
+                        </div>
+                        <a href="/admin/session/index.html"> <button class="btn btn-success" style="margin-bottom:20px">back</button></a>
+                  
+                        <form>
+  <div class="mb-3">
+    <label  class="form-label">Title</label>
+                     <select name="title" id="title" class="form-control">
+                     <option class="form-group" value="">Choose Title</option>
+                             <option class="form-group" value="Yoga">Yoga</option>
+                             <option class="form-group" value="Cardio">Cardio</option>
+                             <option class="form-group" value="Zumba">Zumba</option>
+                     </select>
+                     </div>
+                     <div class="mb-3">
+     <label  class="form-label">Name</label>
+     <input name="name" type="text" class="form-control" id="name"/>
+   </div>
+   <div class="mb-3">
+     <label  class="form-label">Desctiption</label>
+     <input name="description" type="text" class="form-control" id="description" />
+   </div>
+   <div class="mb-3">
+     <label  class="form-label">Image</label>
+     <input name="file" type="text" class="form-control" id="image"/>
+   </div>
+   
+   <button type="submit" class="btn btn-primary" onclick="AddSession()">Add</button>
+ 
+</form>
+                </div>
+                </div>
+                
+        </section>
+    
+    
+    <script src="../assets/index.js"></script>
+
+    <script>
+
+function AddSession() {
+    var title = document.getElementById('title').value;
+    var name = document.getElementById('name').value;
+    var description = document.getElementById('description').value;
+    var image = document.getElementById('image').value;
+
+    // Generate unique ID
+    var id = uuidv4();
+
+    if (title.trim() !== '' && name.trim() !== '' && description.trim() !== '' && image.trim() !== '') {
+        event.preventDefault();
+        // Get trainers array from localStorage
+        var sessions = JSON.parse(localStorage.getItem('session')) || [];
+
+        // Create trainer object
+        var session = {
+            id: id,
+            title: title,
+            name: name,
+            description : description,
+            image: image
+        };
+
+        // Push the trainer object into the trainers array
+        sessions.push(session);
+
+        // Save updated trainers array back to localStorage
+        localStorage.setItem('session', JSON.stringify(sessions));
+
+        // Clear input fields
+        document.getElementById('title').value = '';
+        document.getElementById('name').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('image').value = '';
+        alert('Session successfully added!');
+        window.location.href = '/admin/session/index.html';
+    }
+}
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+
+    </script>
+</body>
+</html>

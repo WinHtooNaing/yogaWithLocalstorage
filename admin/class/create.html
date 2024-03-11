@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link rel="stylesheet" href="../assets/index.css"/>
+</head>
+<body>
+
+	<section id="sidebar">
+        <a href="#" class="brand" >
+            <i class="bx bxs-smile"></i>
+            <span class="text">Admin Panel</span>
+        </a>
+        <ul class="side-menu hrefp">
+            
+            <li  >
+                <a href="/admin/trainer/index.html" id="a" >
+                    <i class="bx bxs-shopping-bag-alt"></i>
+                    <span class="text">Trainer</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="#" id="a" >
+                    <i class="bx bxs-doughnut-chart"></i>
+                    <span class="text">Class</span>
+                </a>
+            </li>
+            <li >
+                <a href="/admin/session/index.html" id="a"  >
+                    <i class="bx bxs-message-dots"></i>
+                    <span class="text">Sessions</span>
+                </a>
+            </li>
+            
+        </ul>
+       
+    </section>
+    
+    <section id='content'>
+     <div class="table-data" style="width:80%;margin-left:10%">
+                    <div class="order">
+                        <div class="head">
+                            <h3>Add Class</h3>
+                            
+                        </div>
+                        <a href="/admin/class/index.html"> <button class="btn btn-success" style="margin-bottom:20px">back</button></a>
+                  
+                        <form>
+  <div class="mb-3">
+    <label  class="form-label">Class Name</label>
+    <input type="text" class="form-control" id="class_name"/>
+  </div>
+  <div class="mb-3">
+    <label  class="form-label">Trainer Name</label>
+    <select class="form-select" id="trainer_name">
+    </select>
+  </div>
+  <div class="mb-3">
+    <label  class="form-label">Time</label>
+    <input type="text" class="form-control" id="time"/>
+  </div>
+  <div class="mb-3">
+    <label  class="form-label">Price</label>
+    <input type="number" class="form-control" id="price"/>
+  </div>
+  
+  <button type="submit" class="btn btn-primary" onclick="AddClass()">Add</button>
+</form>
+                </div>
+                </div>
+                
+        </section>
+    
+    
+    <script src="../assets/index.js"></script>
+
+    <script>
+
+function AddClass() {
+    var class_name = document.getElementById('class_name').value;
+    var trainer_name = document.getElementById('trainer_name').value;
+    var time = document.getElementById('time').value;
+    var price = document.getElementById('price').value;
+
+
+    // Generate unique ID
+    var id = uuidv4();
+
+    if (class_name.trim() !== '' && trainer_name.trim() !== '' && time.trim() !== '' && price.trim() !== '') {
+        event.preventDefault();
+        // Get trainers array from localStorage
+        var classes = JSON.parse(localStorage.getItem('classes')) || [];
+
+        // Create trainer object
+        var classs = {
+            id: id,
+            class_name: class_name,
+            trainer_name: trainer_name,
+            time: time,
+            price: price
+        };
+
+        // Push the trainer object into the trainers array
+        classes.push(classs);
+
+        // Save updated trainers array back to localStorage
+        localStorage.setItem('classes', JSON.stringify(classes));
+
+        // Clear input fields
+        document.getElementById('class_name').value = '';
+        document.getElementById('trainer_name').value = '';
+        document.getElementById('time').value = '';
+        document.getElementById('price').value = '';
+
+        alert('Class successfully added!');
+        window.location.href = '/admin/class/index.html';
+    }
+}
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+
+    </script>
+   <script>
+    // Function to retrieve trainer names from localStorage
+    function getTrainerNames() {
+        const trainers = JSON.parse(localStorage.getItem('trainers')) || [];
+        return trainers.map(trainer => trainer.name);
+    }
+
+    // Function to populate the trainer names in the select box
+    function populateTrainerNames() {
+        const trainerNames = getTrainerNames();
+        const selectBox = document.getElementById('trainer_name');
+
+        // Clear existing options
+        selectBox.innerHTML = '';
+
+        // Add default option
+        const defaultOption = document.createElement('option');
+        defaultOption.text = 'Select Trainer';
+        defaultOption.value = '';
+        defaultOption.selected = true;
+        defaultOption.disabled = true;
+        selectBox.add(defaultOption);
+
+        // Create and append options for each trainer name
+        trainerNames.forEach(name => {
+            const option = document.createElement('option');
+            option.text = name;
+            option.value = name;
+            selectBox.add(option);
+        });
+    }
+
+    // Call the function to populate the trainer names when the page loads
+    window.onload = function() {
+        populateTrainerNames();
+    };
+</script>
+</body>
+</html>

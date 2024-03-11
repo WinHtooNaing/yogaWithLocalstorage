@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link rel="stylesheet" href="../assets/index.css"/>
+</head>
+<body>
+
+	<section id="sidebar">
+        <a href="#" class="brand" >
+            <i class="bx bxs-smile"></i>
+            <span class="text">Admin Panel</span>
+        </a>
+        <ul class="side-menu hrefp">
+            
+            <li  >
+                <a href="/admin/trainer/index.html" id="a" >
+                    <i class="bx bxs-shopping-bag-alt"></i>
+                    <span class="text">Trainer</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="#" id="a" >
+                    <i class="bx bxs-doughnut-chart"></i>
+                    <span class="text">Class</span>
+                </a>
+            </li>
+            <li >
+                <a href="/admin/session/index.html" id="a"  >
+                    <i class="bx bxs-message-dots"></i>
+                    <span class="text">Sessions</span>
+                </a>
+            </li>
+            
+        </ul>
+       
+    </section>
+    
+    <section id='content'>
+     <div class="table-data" style="width:80%;margin-left:10%">
+                    <div class="order">
+                        <div class="head">
+                            <h3>Edit Class</h3>
+                            
+                        </div>
+                        <a href="/admin/class/index.html"> <button class="btn btn-success" style="margin-bottom:20px">back</button></a>
+                  
+                        <form id="edit-form">
+  <div class="mb-3">
+    <label  class="form-label">Class Name</label>
+    <input type="text" class="form-control" id="class_name"/>
+  </div>
+  <div class="mb-3">
+    <label  class="form-label">Trainer Name</label>
+    <select class="form-select" id="trainer_name"></select>
+  </div>
+  <div class="mb-3">
+    <label  class="form-label">Time</label>
+    <input type="text" class="form-control" id="time"/>
+  </div>
+  <div class="mb-3">
+    <label  class="form-label">Price</label>
+    <input type="number" class="form-control" id="price"/>
+  </div>
+  
+  <button type="submit" class="btn btn-primary" ">Edit</button>
+</form>
+                </div>
+                </div>
+                
+        </section>
+    
+    
+    <script src="../assets/index.js"></script>
+    <script>
+        // Function to parse URL query parameters
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+    
+        // Retrieve the class ID from the URL
+        const classId = getQueryParam('id');
+    
+        // Function to fetch class information
+        function getClassById(id) {
+            const classes = JSON.parse(localStorage.getItem('classes')) || [];
+            return classes.find(classs => classs.id === id);
+        }
+    
+        // Function to populate form fields with class information
+        function populateForm(classs) {
+            document.getElementById('class_name').value = classs.class_name;
+            document.getElementById('trainer_name').value = classs.trainer_name;
+            document.getElementById('time').value = classs.time;
+            document.getElementById('price').value = classs.price;
+        }
+    
+        // Function to update class information
+        function updateClass(id, updatedClass) {
+            const classes = JSON.parse(localStorage.getItem('classes')) || [];
+            const updatedClasses = classes.map(classs => {
+                if (classs.id === id) {
+                    return updatedClass;
+                }
+                return classs;
+            });
+            localStorage.setItem('classes', JSON.stringify(updatedClasses));
+        }
+    
+        // Fetch class information and populate the edit form
+        const classs = getClassById(classId);
+        if (classs) {
+            populateForm(classs);
+        } else {
+            // Class not found, handle error
+            console.error('Class not found');
+        }
+    
+        // Add event listener to the form for submitting edits
+        document.getElementById('edit-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+    
+            // Get the updated values from the form
+            const updatedClass = {
+                id: classId,
+                class_name: document.getElementById('class_name').value,
+                trainer_name: document.getElementById('trainer_name').value,
+                time: document.getElementById('time').value,
+                price: document.getElementById('price').value,
+            };
+    
+            // Update class information in localStorage
+            updateClass(classId, updatedClass);
+    
+            // Redirect to the classes list page or show a success message
+            alert('Class information updated successfully!');
+            window.location.href = '/admin/class/index.html';
+        });
+    </script>
+    <script>
+        // Function to retrieve trainer names from localStorage
+        function getTrainerNames() {
+            const trainers = JSON.parse(localStorage.getItem('trainers')) || [];
+            return trainers.map(trainer => trainer.name);
+        }
+    
+        // Function to populate the trainer names in the select box
+        function populateTrainerNames(selectedTrainerName = '') {
+            const trainerNames = getTrainerNames();
+            const selectBox = document.getElementById('trainer_name');
+    
+            // Clear existing options
+            selectBox.innerHTML = '';
+    
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.text = 'Select Trainer';
+            defaultOption.value = '';
+            selectBox.add(defaultOption);
+    
+            // Create and append options for each trainer name
+            trainerNames.forEach(name => {
+                const option = document.createElement('option');
+                option.text = name;
+                option.value = name;
+                if (name === selectedTrainerName) {
+                    option.selected = true;
+                }
+                selectBox.add(option);
+            });
+        }
+    
+        // Retrieve the selected trainer's name from the query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedTrainerName = urlParams.get('trainer_name');
+    
+        // Call the function to populate the trainer names when the page loads
+        window.onload = function() {
+            populateTrainerNames(selectedTrainerName);
+        };
+    </script>
+    
+</body>
+</html>

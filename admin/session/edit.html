@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link rel="stylesheet" href="../assets/index.css"/>
+</head>
+<body>
+
+    <section id="sidebar">
+        <a href="#" class="brand" >
+            <i class="bx bxs-smile"></i>
+            <span class="text">Admin Panel</span>
+        </a>
+        <ul class="side-menu hrefp">
+            
+            <li >
+                <a href="/admin/trainer/index.html" id="a" >
+                    <i class="bx bxs-shopping-bag-alt"></i>
+                    <span class="text">Trainer</span>
+                </a>
+            </li>
+            <li >
+                <a href="/admin/trainer/index.html" id="a" >
+                    <i class="bx bxs-doughnut-chart"></i>
+                    <span class="text">Class</span>
+                </a>
+            </li>
+            <li  class="active">
+                <a href="/admin/session/index.html" id="a"  >
+                    <i class="bx bxs-message-dots"></i>
+                    <span class="text">Sessions</span>
+                </a>
+            </li>
+            
+        </ul>
+       
+    </section>
+    
+    <section id='content'>
+     <div class="table-data" style="width:80%;margin-left:10%">
+                    <div class="order">
+                        <div class="head">
+                            <h3>Edit Session</h3>
+                            
+                        </div>
+                        <a href="/admin/session/index.html"> <button class="btn btn-success" style="margin-bottom:20px">back</button></a>
+                  
+                        <form id="edit-form">
+                            <div class="mb-3">
+                              <label  class="form-label">Title</label>
+                                               <select name="title" id="title" class="form-control">
+                                                <option class="form-group" value="">Choose Title</option>
+                                                <option class="form-group" value="Yoga">Yoga</option>
+                                                <option class="form-group" value="Cardio">Cardio</option>
+                                                <option class="form-group" value="Zumba">Zumba</option>
+                                               </select>
+                                               </div>
+                                               <div class="mb-3">
+                               <label  class="form-label">Name</label>
+                               <input name="name" type="text" class="form-control" id="name"/>
+                             </div>
+                             <div class="mb-3">
+                               <label  class="form-label">Desctiption</label>
+                               <input name="description" type="text" class="form-control" id="description" />
+                             </div>
+                             <div class="mb-3">
+                               <label  class="form-label">Image</label>
+                               <input name="file" type="text" class="form-control" id="image"/>
+                             </div>
+                             
+                             <button type="submit" class="btn btn-primary">Update</button>
+                           
+                          </form>
+                </div>
+                </div>
+                
+        </section>
+    
+    
+    <script src="../assets/index.js"></script>
+    <script>
+        // Function to parse URL query parameters
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+    
+        // Retrieve the session ID from the URL
+        const sessionId = getQueryParam('id');
+    
+        // Function to fetch session information
+        function getSessionById(id) {
+            const sessions = JSON.parse(localStorage.getItem('session')) || [];
+            return sessions.find(session => session.id === id);
+        }
+    
+        // Function to populate form fields with session information
+        function populateForm(session) {
+            document.getElementById('title').value = session.title;
+            document.getElementById('name').value = session.name;
+            document.getElementById('description').value = session.description;
+            document.getElementById('image').value = session.image;
+        }
+    
+        // Function to update session information
+        function updateSession(id, updatedSession) {
+            const sessions = JSON.parse(localStorage.getItem('session')) || [];
+            const updatedSessions = sessions.map(session => {
+                if (session.id === id) {
+                    return updatedSession;
+                }
+                return session;
+            });
+            localStorage.setItem('session', JSON.stringify(updatedSessions));
+        }
+    
+        // Fetch session information and populate the edit form
+        const session = getSessionById(sessionId);
+        if (session) {
+            populateForm(session);
+        } else {
+            // Session not found, handle error
+            console.error('Session not found');
+        }
+    
+        // Add event listener to the form for submitting edits
+        document.getElementById('edit-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+    
+            // Get the updated values from the form
+            const updatedSession = {
+                id: sessionId,
+                title: document.getElementById('title').value,
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                image: document.getElementById('image').value,
+            };
+    
+            // Update session information in localStorage
+            updateSession(sessionId, updatedSession);
+    
+            // Redirect to the sessions list page or show a success message
+            alert('Session information updated successfully!');
+            window.location.href = '/admin/session/index.html';
+        });
+    </script>
+    
+    
+</body>
+</html>

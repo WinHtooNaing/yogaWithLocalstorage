@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link rel="stylesheet" href="../assets/index.css"/>
+</head>
+<body>
+	<section id="sidebar">
+        <a href="#" class="brand" >
+            <i class="bx bxs-smile"></i>
+            <span class="text">Admin Panel</span>
+        </a>
+        <ul class="side-menu hrefp">
+            
+            <li  class="active">
+                <a href="#" id="a" >
+                    <i class="bx bxs-shopping-bag-alt"></i>
+                    <span class="text">Trainer</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/class/index.html" id="a" >
+                    <i class="bx bxs-doughnut-chart"></i>
+                    <span class="text">Class</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/session/index.html" id="a"  >
+                    <i class="bx bxs-message-dots"></i>
+                    <span class="text">Sessions</span>
+                </a>
+            </li>
+            
+        </ul>
+       
+    </section>
+    
+    
+    <section id='content'>
+        
+        <div class="table-data" style="width:90%;margin-left:5%">
+                    <div class="order">
+                        <div class="head">
+                            <h3>Trainers</h3>
+                            
+                        </div>
+                        <a href="/admin/trainer/create.html"> <button class="btn btn-success" style="margin-bottom:20px">Add Trainer</button></a>
+                  
+                        <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Trainer Name</th>
+      <th scope="col">Article</th>
+      <th scope='col'>Action</th>
+    </tr>
+  </thead>
+  <tbody id="trainers-table-body">
+ 
+    
+  
+  
+   
+  </tbody>
+</table>
+                </div>
+                </div>
+                
+        </section>
+    
+    <script src="../assets/index.js"></script>
+    
+    
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+        function displayTrainers() {
+            // Get trainers array from localStorage
+            var trainers = JSON.parse(localStorage.getItem('trainers')) || [];
+    
+            // Get a reference to the table body
+            var tableBody = document.getElementById('trainers-table-body');
+    
+            // Clear existing table rows
+            tableBody.innerHTML = '';
+    
+            // Counter for row numbers
+            var counter = 1;
+    
+            // Loop through each trainer and create a table row for each one
+            trainers.forEach(function(trainer) {
+                var row = '<tr id="trainer-row-' + trainer.id + '">' +
+                    '<td scope="row">' + counter++ + '</td>' +
+                    '<td>' + trainer.name + '</td>' +
+                    '<td>' + trainer.article + '</td>' +
+                    '<td style="display:flex;flex-direction:row">' +
+                        '<a href="edit.html?id=' + trainer.id + '" style="margin-right:10px"><button class="btn btn-warning">Edit</button></a>' +
+                    '<button class="btn btn-danger" type="button" onclick="deleteTrainer(\'' + trainer.id + '\')">Delete</button>' +
+                    '</td>' +
+                    '</tr>';
+    
+                // Append the row to the table body
+                tableBody.innerHTML += row;
+            });
+        }
+        window.onload = function() {
+            displayTrainers();
+        };
+        function deleteTrainer(trainerId) {
+            // Get trainers array from localStorage
+            var trainers = JSON.parse(localStorage.getItem('trainers')) || [];
+    
+            // Filter out the trainer with the specified ID
+            var updatedTrainers = trainers.filter(function(trainer) {
+                return trainer.id !== trainerId;
+            });
+    
+            // Save the updated trainers array back to localStorage
+            localStorage.setItem('trainers', JSON.stringify(updatedTrainers));
+    
+            // Remove the corresponding table row from the DOM
+            var rowToRemove = document.getElementById('trainer-row-' + trainerId);
+            if (rowToRemove) {
+                rowToRemove.remove();
+                alert("Trainer removed successfully")
+                displayTrainers()
+            } else {
+                console.log('Trainer not found:', trainerId); // Log a message if the trainer row is not found
+            }
+        }
+    
+        // Call the function to display trainers when the page loads
+        window.onload = function() {
+            displayTrainers();
+        };
+    </script>
+    
+</body>
+</html>
